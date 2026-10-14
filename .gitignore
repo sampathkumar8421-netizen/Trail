@@ -8,13 +8,13 @@ pnpm-debug.log*
 vite-dev.log
 vite-dev.err
 
+# Vercel
+.vercel/
+
 # Env
 .env
 .env.local
 .env.*.local
-
-# Vercel
-.vercel/
 
 # Agent tooling / local artifacts
 .agents/
