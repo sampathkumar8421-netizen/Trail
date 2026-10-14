@@ -15,6 +15,19 @@ export const SpendProvider = ({ children }) => {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
 
+  // UI: collapsible sidebar + feature flags
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [features, setFeatures] = useState({
+    waste: true,
+    renewals: true,
+    vendors: true,
+    team: true,
+    search: true,
+    currencySwitch: true,
+    urgentAlerts: true,
+    execSummary: true,
+  });
+
   // Exchange rate USD to INR
   const USD_TO_INR = 83.5;
 
@@ -193,6 +206,21 @@ export const SpendProvider = ({ children }) => {
     }
   };
 
+  // Toggle sidebar collapsed state
+  const toggleSidebar = () => setIsSidebarCollapsed((v) => !v);
+
+  // Toggle a feature flag; if disabling the module currently in view, fall back to dashboard
+  const toggleFeature = (key) => {
+    setFeatures((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      const moduleTabs = ['waste', 'renewals', 'vendors', 'team'];
+      if (moduleTabs.includes(key) && !next[key] && activeTab === key) {
+        setActiveTab('dashboard');
+      }
+      return next;
+    });
+  };
+
   return (
     <SpendContext.Provider
       value={{
@@ -218,6 +246,11 @@ export const SpendProvider = ({ children }) => {
         setCategoryFilter,
         statusFilter,
         setStatusFilter,
+        isSidebarCollapsed,
+        setIsSidebarCollapsed,
+        toggleSidebar,
+        features,
+        toggleFeature,
         addSubscription,
         updateSubscriptionStatus,
         deleteSubscription,

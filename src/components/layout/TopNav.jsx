@@ -11,6 +11,7 @@ export default function TopNav() {
     searchQuery,
     setSearchQuery,
     metrics,
+    features,
   } = useSpend();
 
   const tabTitles = {
@@ -38,19 +39,22 @@ export default function TopNav() {
       {/* Center / Right controls */}
       <div className="flex items-center gap-3">
         {/* Global Search */}
-        <div className="relative">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Search vendor, owner, category..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-64 pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-[4px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-400 focus:bg-white transition-colors"
-          />
-        </div>
+        {features.search && (
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search vendor, owner, category..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-64 pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-[4px] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-400 focus:bg-white transition-colors"
+            />
+          </div>
+        )}
 
         {/* Currency Switcher ($ / ₹) */}
-        <div className="flex items-center bg-slate-100 p-0.5 rounded-[4px] border border-slate-200 text-xs">
+        {features.currencySwitch && (
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-[4px] border border-slate-200 text-xs">
           <button
             onClick={() => setCurrency('USD')}
             className={`px-2 py-1 rounded-[3px] font-mono text-xs font-medium flex items-center gap-1 transition-all ${
@@ -75,10 +79,11 @@ export default function TopNav() {
             <IndianRupee className="w-3 h-3" />
             INR
           </button>
-        </div>
+          </div>
+        )}
 
         {/* Urgent Alert indicator */}
-        {metrics.urgentRenewalsCount > 0 && (
+        {features.urgentAlerts && metrics.urgentRenewalsCount > 0 && (
           <div
             title={`${metrics.urgentRenewalsCount} contracts renewing in under 14 days`}
             className="flex items-center gap-1 px-2 py-1 bg-red-50 border border-red-200 rounded-[4px] text-red-700 text-xs font-medium"
